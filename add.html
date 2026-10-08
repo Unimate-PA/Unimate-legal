@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aggiungi un amico – unimate</title>
+<style>
+  :root { --bg: #ffffff; --text: #12352F; --muted: #3C6B63; --accent: #0E5A52; --btn-text: #ffffff; --card: #E6F1EE; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0F1F1C; --text: #E6F1EE; --muted: #9FC9BF; --accent: #6FD6BF; --btn-text: #0F1F1C; --card: #17332E; }
+  }
+  html { background: var(--bg); }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
+    box-sizing: border-box; color: var(--text); background: var(--bg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 17px; line-height: 1.6; }
+  main { width: 100%; max-width: 420px; text-align: center; }
+  .logo { font-size: 2rem; font-weight: 500; letter-spacing: -0.5px; margin: 0 0 24px; }
+  .card { background: var(--card); border-radius: 24px; padding: 24px; }
+  h1 { font-size: 1.3rem; line-height: 1.3; margin: 0 0 8px; }
+  p { margin: 0.5em 0; color: var(--muted); }
+  .btn { display: inline-block; margin-top: 16px; padding: 14px 28px; border-radius: 999px;
+    background: var(--accent); color: var(--btn-text); font-weight: 600; text-decoration: none; }
+  .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .small { font-size: 0.9rem; margin-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="logo">unimate</p>
+  <div class="card">
+    <h1 id="title">Aggiungi un amico</h1>
+    <p id="who">Apro l'app unimate…</p>
+    <a id="open" class="btn" href="#" hidden>Apri in unimate</a>
+    <p class="small" id="help">Se l'app non si apre, controlla di averla installata e tocca il pulsante.</p>
+  </div>
+</main>
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var u = (params.get('u') || '').toLowerCase();
+    var valid = /^[a-z0-9_]{3,20}$/.test(u);
+    var who = document.getElementById('who');
+    var open = document.getElementById('open');
+    var help = document.getElementById('help');
+    if (!valid) {
+      document.getElementById('title').textContent = 'Link non valido';
+      who.textContent = 'Questo link non contiene uno username valido.';
+      help.hidden = true;
+      return;
+    }
+    var link = 'unimate://add/' + u;
+    who.textContent = '@' + u + ' vuole aggiungerti su unimate.';
+    open.href = link;
+    open.hidden = false;
+    // tentativo automatico (alcuni telefoni lo bloccano: in quel caso basta toccare il pulsante)
+    setTimeout(function () { window.location.href = link; }, 500);
+  })();
+</script>
+</body>
+</html>
